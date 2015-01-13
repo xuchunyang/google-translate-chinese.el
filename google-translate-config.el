@@ -63,3 +63,33 @@
    (if (chinese-word-cjk-string-p word)
        (google-translate-request "zh-CN" "en" word)
      (google-translate-request "en" "zh-CN" word))))
+
+(defun google-translate-search-at-point-and-replace ()
+  "可以不写 DocString."
+  (interactive)
+  (let ((word (google-translate-chinese--region-or-word)))
+    (if word
+        (let (explains
+              popup-list
+              (detailed-translate (google-translate-chinese--detailed-translate word)))
+          (loop for item across detailed-translate do
+                (let ((index 0))
+                  (unless (string-equal (aref item 0) "")
+                    (loop for translation across (aref item 1) do
+                          (push (format "%d. %s" (incf index) translation) popup-list)
+                          (push (concat "<" (aref item 0) "> "
+                                        (concat-string (elt (elt (aref item 2) (1- index)) 1)))
+                                popup-list)))))
+
+          (setq popup-list (reverse popup-list))
+
+          (let ((index 0) (a-popup-menu nil) selected-item)
+            (while (< index (length popup-list))
+              (push (popup-make-item (nth index popup-list)
+                                     :summary (nth (1+ index) popup-list))
+                    a-popup-menu)
+              (setq index (+ index 2)))
+            (setq selected-item (popup-menu* (reverse a-popup-menu)))
+            (delete-char (- 0 (length word)))
+            (insert (substring selected-item 3))))
+      (message "Nothing to translate"))))
