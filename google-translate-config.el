@@ -72,7 +72,7 @@
        (google-translate-request "zh-CN" "en" word)
      (google-translate-request "en" "zh-CN" word))))
 
-(defun google-translate-search-at-point-and-replace ()
+(defun google-translate-chinese-search-at-point-and-replace ()
   "可以不写 DocString."
   (interactive)
   (let ((word (google-translate-chinese--region-or-word)))
