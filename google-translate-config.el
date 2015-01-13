@@ -79,25 +79,31 @@
     (if word
         (let (explains
               popup-list
-              (detailed-translate (google-translate-chinese--detailed-translate word)))
-          (loop for item across detailed-translate do
-                (let ((index 0))
-                  (unless (string-equal (aref item 0) "")
-                    (loop for translation across (aref item 1) do
-                          (push (format "%d. %s" (incf index) translation) popup-list)
-                          (push (concat "<" (aref item 0) "> "
-                                        (concat-array-as-string (elt (elt (aref item 2) (1- index)) 1)))
-                                popup-list)))))
+              (detailed-translate (google-translate-chinese--detailed-translate word))
+              selected-item)
+          (if (not detailed-translate)
+              (progn
+                (setq selected-item (popup-menu* (list (popup-make-item (google-translate-chinese--translate word)))))
+                (delete-char (- 0 (length word)))
+                (insert selected-item))
+            (loop for item across detailed-translate do
+                  (let ((index 0))
+                    (unless (string-equal (aref item 0) "")
+                      (loop for translation across (aref item 1) do
+                            (push (format "%d. %s" (incf index) translation) popup-list)
+                            (push (concat "<" (aref item 0) "> "
+                                          (concat-array-as-string (elt (elt (aref item 2) (1- index)) 1)))
+                                  popup-list)))))
 
-          (setq popup-list (reverse popup-list))
+            (setq popup-list (reverse popup-list))
 
-          (let ((index 0) (a-popup-menu nil) selected-item)
-            (while (< index (length popup-list))
-              (push (popup-make-item (nth index popup-list)
-                                     :summary (nth (1+ index) popup-list))
-                    a-popup-menu)
-              (setq index (+ index 2)))
-            (setq selected-item (popup-menu* (reverse a-popup-menu)))
-            (delete-char (- 0 (length word)))
-            (insert (substring selected-item 3))))
+            (let ((index 0) (a-popup-menu nil))
+              (while (< index (length popup-list))
+                (push (popup-make-item (nth index popup-list)
+                                       :summary (nth (1+ index) popup-list))
+                      a-popup-menu)
+                (setq index (+ index 2)))
+              (setq selected-item (popup-menu* (reverse a-popup-menu)))
+              (delete-char (- 0 (length word)))
+              (insert (substring selected-item 3)))))
       (message "Nothing to translate"))))
