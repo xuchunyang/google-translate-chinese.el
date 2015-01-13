@@ -26,6 +26,14 @@
        (google-translate-request "zh-CN" "en" word)
      (google-translate-request "en" "zh-CN" word))))
 
+(defun concat-array-as-string (v)
+  "Concat strings in v to a whole string."
+  (let ((index 0) (str ""))
+    (while (< index (length v))
+      (setq str (concat str (elt v index) " "))
+      (cl-incf index))
+    (substring str 0 (1- (length str)))))
+
 (defun google-translate-chinese-at-point ()
   "Translate at point and show full result with buffer."
   (interactive)
@@ -78,7 +86,7 @@
                     (loop for translation across (aref item 1) do
                           (push (format "%d. %s" (incf index) translation) popup-list)
                           (push (concat "<" (aref item 0) "> "
-                                        (concat-string (elt (elt (aref item 2) (1- index)) 1)))
+                                        (concat-array-as-string (elt (elt (aref item 2) (1- index)) 1)))
                                 popup-list)))))
 
           (setq popup-list (reverse popup-list))
