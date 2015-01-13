@@ -1,0 +1,25 @@
+#+Title: 在 Emacs 中使用 Google 翻译
+
+* 关于
+
+这是我的关于 [[https://github.com/atykhonov/google-translate][google-translate]] 的配置，尝试提供更好的中文支持。
+
+* 依赖
+
+- [[https://github.com/atykhonov/google-translate][google-translate]]
+- [[https://github.com/auto-complete/popup-el][popup-el]] 
+- [[https://github.com/xuchunyang/chinese-word-at-point.el][chinese-word-at-point.el]]
+
+以上 3 个包 Melpa 中都有，可以用 =package.el= 安装。需要注意的是：其中 [[https://github.com/xuchunyang/chinese-word-at-point.el][chinese-word-at-point.el]] 需要安装好 [[https://github.com/fxsjy/jieba][结巴中文分词]] 才能使用。
+
+
+* 使用
+
+- google-translate-chinese-at-point :: 翻译光标下的词，用 buffer 显示结果
+- google-translate-chinese-at-point-echo-area :: 翻译光标下的词，用 echo area 显示结果
+- google-translate-chinese-query :: 手动输入需要翻译的内容，用 buffer 显示结果
+- google-translate-chinese-search-at-point-and-replace :: 翻译光标下的词，用 popup menu 显示结果，并用选择的结果替换光标下的词（见下图）
+
+[[http://i.imgur.com/kuuIn6v.gif][http://i.imgur.com/kuuIn6v.gif]]
+
+
