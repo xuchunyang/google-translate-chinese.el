@@ -66,12 +66,6 @@
           (google-translate-translate "en" "zh-CN" word))
       (message "Nothing to translate"))))
 
-(defun google-translate-chinese--detailed-translate (word)
-  (google-translate-json-detailed-translation
-   (if (chinese-word-cjk-string-p word)
-       (google-translate-request "zh-CN" "en" word)
-     (google-translate-request "en" "zh-CN" word))))
-
 (defun google-translate-chinese-search-at-point-and-replace ()
   "可以不写 DocString."
   (interactive)
