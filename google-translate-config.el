@@ -84,7 +84,7 @@
           (if (not detailed-translate)
               (progn
                 (setq selected-item (popup-menu* (list (popup-make-item (google-translate-chinese--translate word)))))
-                (delete-char (- 0 (length word)))
+                (delete-char (- (length word)))
                 (insert selected-item))
             (loop for item across detailed-translate do
                   (let ((index 0))
