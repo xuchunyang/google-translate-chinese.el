@@ -78,6 +78,7 @@
           (if (not detailed-translate)
               (progn
                 (setq selected-item (popup-menu* (list (popup-make-item (google-translate-chinese--translate word)))))
+                ;; 此处假设了光标在词的后面，而不是其它位置，下同
                 (delete-char (- (length word)))
                 (insert selected-item))
             (loop for item across detailed-translate do
