@@ -2,25 +2,27 @@
 (require 'chinese-word-at-point)
 (require 'google-translate)
 
+(define-namespace google-translate-chinese-
+
 (setq google-translate-base-url
       "http://translate.google.cn/translate_a/t")
 
 (setq google-translate-listen-url
       "http://translate.google.cn/translate_tts")
 
-(defun google-translate-chinese--region-or-word ()
+(defun -region-or-word ()
   (if (use-region-p)
       (buffer-substring-no-properties (region-beginning)
                                       (region-end))
     (thing-at-point 'chinese-or-other-word t)))
 
-(defun google-translate-chinese--translate (word)
+(defun -translate (word)
   (google-translate-json-translation
    (if (chinese-word-cjk-string-p word)
        (google-translate-request "zh-CN" "en" word)
      (google-translate-request "en" "zh-CN" word))))
 
-(defun google-translate-chinese--detailed-translate (word)
+(defun -detailed-translate (word)
   (google-translate-json-detailed-translation
    (if (chinese-word-cjk-string-p word)
        (google-translate-request "zh-CN" "en" word)
@@ -34,28 +36,28 @@
       (cl-incf index))
     (substring str 0 (- (length str) 2))))
 
-(defun google-translate-chinese-at-point ()
+(defun at-point ()
   "Translate at point and show full result with buffer."
   (interactive)
-  (let ((word (google-translate-chinese--region-or-word)))
+  (let ((word (-region-or-word)))
     (if word
         (if (chinese-word-cjk-string-p word)
             (google-translate-translate "zh-CN" "en" word)
           (google-translate-translate "en" "zh-CN" word))
       (message "Nothing to translate"))))
 
-(defun google-translate-chinese-at-point-echo-area ()
+(defun at-point-echo-area ()
   "Translate at point and show only translation in echo area. "
   (interactive)
-  (let ((word (google-translate-chinese--region-or-word)))
+  (let ((word (-region-or-word)))
     (if word
-        (message (google-translate-chinese--translate word))
+        (message (-translate word))
       (message "Nothing to translate"))))
 
-(defun google-translate-chinese-query ()
+(defun query ()
   "Translate input and show full result with buffer."
   (interactive)
-  (let* ((word (google-translate-chinese--region-or-word))
+  (let* ((word (-region-or-word))
          (word (read-string (format "Translate (%s): "
                                     (or word ""))
                             nil nil
@@ -66,18 +68,18 @@
           (google-translate-translate "en" "zh-CN" word))
       (message "Nothing to translate"))))
 
-(defun google-translate-chinese-search-at-point-and-replace ()
+(defun search-at-point-and-replace ()
   "可以不写 DocString."
   (interactive)
-  (let ((word (google-translate-chinese--region-or-word)))
+  (let ((word (-region-or-word)))
     (if word
         (let (explains
               popup-list
-              (detailed-translate (google-translate-chinese--detailed-translate word))
+              (detailed-translate (-detailed-translate word))
               selected-item)
           (if (not detailed-translate)
               (progn
-                (setq selected-item (popup-menu* (list (popup-make-item (google-translate-chinese--translate word)))))
+                (setq selected-item (popup-menu* (list (popup-make-item (-translate word)))))
                 ;; 此处假设了光标在词的后面，而不是其它位置，下同
                 (delete-char (- (length word)))
                 (insert selected-item))
@@ -103,11 +105,13 @@
               (insert (substring selected-item 3)))))
       (message "Nothing to translate"))))
 
-(defun google-translate-chinese-open-word-with-web ()
+(defun open-word-with-web ()
   "搜索附近的词，用浏览器打开。"
-  (let ((word (google-translate-chinese--region-or-word))
+  (interactive)
+  (let ((word (-region-or-word))
         from to)
-    (when word
+    (if (not word)
+        (message "No word found")
       (if (chinese-word-cjk-string-p word)
           (setq from "zh-CN" to "en")
         (setq from "en" to "zh-Cn"))
@@ -115,3 +119,16 @@
       (browse-url (concat "https://translate.google.cn/#"
                           from "/" to "/"
                           (url-hexify-string word))))))
+
+(defun search-and-replace ()
+  "Search word at point and replace with selected result."
+  (interactive)
+  (let ((word (thing-at-point 'word t))
+        (bounds (bounds-of-thing-at-point 'word))
+        selected)
+    (if (not (and word bounds))
+        (message "Nothing to translate")
+      (setq selected (popup-menu* `("item 1" "item 2" ,word)))
+      (delete-region (car bounds) (cdr bounds))
+      (insert selected))))
+)

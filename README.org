@@ -8,6 +8,7 @@
 
 - [[https://github.com/atykhonov/google-translate][google-translate]]
 - [[https://github.com/auto-complete/popup-el][popup-el]] 
+- [[https://github.com/Bruce-Connor/names][names]]
 - [[https://github.com/xuchunyang/chinese-word-at-point.el][chinese-word-at-point.el]]
 
 以上 3 个包 Melpa 中都有，可以用 =package.el= 安装。需要注意的是：其中 [[https://github.com/xuchunyang/chinese-word-at-point.el][chinese-word-at-point.el]] 需要安装好 [[https://github.com/fxsjy/jieba][结巴中文分词]] 才能使用。
