@@ -44,6 +44,7 @@
       (cl-incf index))
     (substring str 0 (- (length str) 2))))
 
+:autoload
 (defun at-point ()
   "Translate at point and show full result with buffer."
   (interactive)
@@ -54,6 +55,7 @@
           (google-translate-translate "en" "zh-CN" word))
       (message "Nothing to translate"))))
 
+:autoload
 (defun at-point-echo-area ()
   "Translate at point and show only translation in echo area. "
   (interactive)
@@ -62,6 +64,7 @@
         (message (-translate word))
       (message "Nothing to translate"))))
 
+:autoload
 (defun query ()
   "Translate input and show full result with buffer."
   (interactive)
@@ -76,6 +79,7 @@
           (google-translate-translate "en" "zh-CN" word))
       (message "Nothing to translate"))))
 
+:autoload
 (defun search-at-point-and-replace ()
   "可以不写 DocString."
   (interactive)
@@ -114,6 +118,7 @@
               (insert (substring selected-item 3)))))
       (message "Nothing to translate"))))
 
+:autoload
 (defun open-word-with-web ()
   "搜索附近的词，用浏览器打开。"
   (interactive)
@@ -129,6 +134,7 @@
                           from "/" to "/"
                           (url-hexify-string word))))))
 
+:autoload
 (defun search-and-replace ()
   "Search word at point and replace with selected result."
   (interactive)
