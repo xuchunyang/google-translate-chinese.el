@@ -2,6 +2,7 @@
 (require 'chinese-word-at-point)
 (require 'google-translate)
 
+;;;###autoload
 (define-namespace google-translate-chinese-
 
 (setq google-translate-base-url
