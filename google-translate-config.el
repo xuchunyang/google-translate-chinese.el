@@ -10,9 +10,6 @@
 (setq google-translate-listen-url
       "http://translate.google.cn/translate_tts")
 
-;; Enable Cache (Notes: the cache isn't cleared automatically)
-(setq-local url-automatic-caching t)
-
 (defun -region-or-word ()
   (if (use-region-p)
       (buffer-substring-no-properties (region-beginning)
